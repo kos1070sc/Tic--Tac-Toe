@@ -1,4 +1,5 @@
-print("This is a Tic Tac Toe game")
+print("This Is Tic Tac Toe")
+print("Please Enter Which Position Number You Want To Play")
 
 player_turn = 1
 
@@ -21,7 +22,7 @@ def print_board():
             print(board[6:9])
         counter += 3
 
-def check_win(game_status):
+def check_win():
     # these are all the possible conbinations that can win with
     win_cases = [
         # rows
@@ -36,29 +37,44 @@ def check_win(game_status):
         [board[0], board[4], board[8]],
         [board[2], board[4], board[6]],
         ]
-    
     # each element in win_cases is a list of 3
     # if all 3 elements are X's or Y's a player (1 or 2) wins
     for i in win_cases:
         if i[0] == i[1] == i[2] == "X":
             print("Player 1 Wins!")
-            game_status = 1
-            return game_status
+            return 1
         elif i[0] == i[1] == i[2] == "O":
             print("Player 2 Wins!")
-            game_status = 2
-            return game_status
-        else:
-            pass
+            return 2
+    return 0
 
 
 
 # user play by entering the position number within the table
+turn_count = 0
 while game_status == 0:
-    print_board()
-    player_input = input("Which number would you like to play\n")
-    if player_input not in board:
-        print("Invalid input")
-    else:
-        print("Correct input")
+    turn_count += 1
+    # after the 9th turn the board is filled but with no winners
+    if turn_count > 9:
+        game_status = 3
+        print("It's a draw")
         break
+    # update board with every turn
+    print_board()
+    # player inputs position number they want to play
+    player_input = input("Player's " + str(player_turn) + " Turn\n")
+    if player_input not in board:
+        print("Invalid Input, Please Try Again")
+        break
+    else:
+        list_index = int(player_input) - 1
+        if player_turn == 1:
+            board[list_index] = "X"
+            player_turn = 2
+        elif player_turn == 2:
+            board[list_index] = "O"
+            player_turn = 1
+    # if a player wins, game status changes and the loop breaks
+    print()
+    game_status = check_win()
+print_board()
